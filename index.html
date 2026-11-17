@@ -18,6 +18,27 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    @page {
+      size: A4;
+      margin: 0mm;
+    }
+    @media print {
+      html, body {
+        background-color: #090D16 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        margin: 0 !important;
+        padding: 10mm 8mm !important;
+      }
+      header { position: static !important; }
+      #filter-bar, nav { display: none !important; }
+      .project-card, .glass-card, section {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+      #featured { page-break-before: always; break-before: page; padding-top: 8mm !important; }
+      #methodology { page-break-before: always; break-before: page; padding-top: 8mm !important; }
+    }
   </style>
 </head>
 <body class="bg-[#090D16] text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950">
