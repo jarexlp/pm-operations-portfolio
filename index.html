@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Javier Reyes Ruiz | Project Management, Digital Operations & BI Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.75);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #34D399 0%, #38BDF8 55%, #818CF8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  </style>
+</head>
+<body class="bg-[#090D16] text-slate-200 antialiased selection:bg-emerald-500 selection:text-slate-950">
+
+  <!-- Sticky Navigation -->
+  <header class="sticky top-0 z-50 border-b border-slate-800/80 bg-[#090D16]/90 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-extrabold text-slate-950 text-base shadow-lg shadow-emerald-500/20">
+          JR
+        </div>
+        <div>
+          <span class="font-bold text-white tracking-tight text-sm sm:text-base">Javier Reyes Ruiz</span>
+          <span class="hidden md:inline-block ml-2 text-xs text-slate-400 border-l border-slate-700 pl-2">
+            Project Manager · Operations &amp; BI Lead
+          </span>
+        </div>
+      </div>
+
+      <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
+        <a href="#featured" class="hover:text-emerald-400 transition">Case Studies</a>
+        <a href="#methodology" class="hover:text-emerald-400 transition">PM Governance</a>
+        <a href="#stack" class="hover:text-emerald-400 transition">Tools &amp; Credentials</a>
+        <a href="Portfolio_Executive_Deck_Javier_Reyes.pdf" target="_blank" class="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-semibold transition shadow-md shadow-emerald-500/20">
+          Download PDF Deck
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden pt-14 pb-12 border-b border-slate-800/60">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-800/60 text-emerald-300 text-xs font-semibold mb-5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Remote LATAM (US Eastern / Central / Pacific Overlap) · Bilingual English (C2) &amp; Spanish
+      </div>
+
+      <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight max-w-4xl">
+        Delivering Cross-Functional Digital Projects, <span class="gradient-text">Predictable Timelines &amp; Quantifiable ROI.</span>
+      </h1>
+
+      <p class="mt-5 text-slate-400 text-base sm:text-lg max-w-3xl leading-relaxed">
+        8+ years leading multi-disciplinary product rollouts, creative workflows, and business intelligence governance for U.S. &amp; Fortune 500 teams. Backed by a <strong class="text-slate-200">Magna Cum Laude Law Degree (LL.B.)</strong> for sharp scope &amp; contract precision and official <strong class="text-slate-200">Google</strong> &amp; <strong class="text-slate-200">DOMO</strong> analytics certifications.
+      </p>
+
+      <!-- Impact Metrics Strip -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-9">
+        <div class="glass-card rounded-xl p-4">
+          <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">5,300+ hrs</div>
+          <div class="text-xs text-slate-400 mt-1">Annual Operational Hours Reclaimed</div>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <div class="text-2xl sm:text-3xl font-extrabold text-cyan-400">$100K+ USD</div>
+          <div class="text-xs text-slate-400 mt-1">Verified Annual Efficiency Savings</div>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <div class="text-2xl sm:text-3xl font-extrabold text-indigo-400">30,000+</div>
+          <div class="text-xs text-slate-400 mt-1">End Users Across Scaled Rollouts</div>
+        </div>
+        <div class="glass-card rounded-xl p-4">
+          <div class="text-2xl sm:text-3xl font-extrabold text-amber-400">80%–98%</div>
+          <div class="text-xs text-slate-400 mt-1">Cycle Time Reduction Across Case Studies</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Case Studies -->
+  <section id="featured" class="py-14 max-w-6xl mx-auto px-5 space-y-10">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-widest text-emerald-400">Selected Portfolio</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Project Case Studies</h2>
+      </div>
+      <p class="text-xs text-slate-400 max-w-md">
+        Confidential enterprise client names are anonymized as "Global Enterprise Partner" in accordance with NDA privacy practices.
+      </p>
+    </div>
+
+    <!-- Interactive Filter Tabs -->
+    <div class="flex flex-wrap gap-2" id="filter-bar">
+      <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-lg text-xs font-semibold bg-emerald-500 text-slate-950 transition" data-filter="all">All Projects (4)</button>
+      <button onclick="filterProjects('digital')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="digital">Digital Platform &amp; Dev</button>
+      <button onclick="filterProjects('agency')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="agency">Marketing Agency Ops</button>
+      <button onclick="filterProjects('bi')" class="filter-btn px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="bi">Enterprise Scaling &amp; BI</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- CASE STUDY 1: ILT OPERATIONS HUB -->
+      <article class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/60 transition" data-category="digital">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-2.5 py-1 rounded-md bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-semibold">Case Study 01 · Digital Product</span>
+            <span class="text-xs text-slate-400 font-mono">Team: 4 Devs + Content</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">ILT Operations Hub &amp; Quorum Risk Engine</h3>
+          <p class="text-xs text-cyan-400 font-medium mt-1">Global Enterprise Partner · End-to-End Platform Delivery</p>
+
+          <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+            Directed planning, sprint milestones, and cross-functional delivery for an internal digital operations platform eliminating manual session scheduling, fragmented spreadsheets, and late quorum cancellations across 2,834 staff.
+          </p>
+
+          <div class="mt-4 bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 text-xs space-y-2">
+            <div><strong class="text-white">Cross-Functional Team Managed:</strong> <span class="text-slate-300">1 Backend Engineer, 2 Frontend Developers &amp; Client In-House Content Designers.</span></div>
+            <div><strong class="text-white">4-Phase Roadmap Governed:</strong> <span class="text-slate-300">P1 Data Foundation (Unique Keys) → P2 Bidirectional Sync → P3 Quorum Risk Engine (<span class="text-rose-400">Red</span>/<span class="text-amber-400">Yellow</span>/<span class="text-emerald-400">Green</span> threshold alerts) → P4 Recruitment &amp; Live Power BI Telemetry.</span></div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-4 text-xs">
+            <div><span class="block text-emerald-400 font-bold text-sm">1,848 hrs/yr</span><span class="text-slate-400">Saved (93.3%)</span></div>
+            <div><span class="block text-cyan-400 font-bold text-sm">$35,112</span><span class="text-slate-400">Annual Savings</span></div>
+            <div><span class="block text-white font-bold text-sm">45m → 3m</span><span class="text-slate-400">Cycle Time</span></div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Roadmap/WBS</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Power Automate</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Power BI</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CASE STUDY 2: PLAN UP AGENCY -->
+      <article class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between hover:border-cyan-500/60 transition" data-category="agency">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-2.5 py-1 rounded-md bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs font-semibold">Case Study 02 · Agency Ops</span>
+            <span class="text-xs text-slate-400 font-mono">Client Consulting</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">Plan Up Agency: Campaign Delivery &amp; Margin Tracking</h3>
+          <p class="text-xs text-cyan-400 font-medium mt-1">Marketing Agency Partner · Operations &amp; Executive Reporting</p>
+
+          <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+            Partnered with agency leadership to streamline creative production queues, standardize campaign briefing workflows, and connect ad spend attribution directly with client invoicing and account capacity tracking.
+          </p>
+
+          <div class="mt-4 bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 text-xs space-y-2">
+            <div><strong class="text-white">Workflow Pipeline Designed:</strong> <span class="text-slate-300">Brief Intake Rules → Copy &amp; Creative Handoffs → Client Review Governance → Campaign Launch &amp; Attribution Dashboards.</span></div>
+            <div><strong class="text-white">Commercial &amp; Budget Control:</strong> <span class="text-slate-300">Audited hours, ad spend reconciliation, and billing tiers to flag scope creep early and protect retainer margins.</span></div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-4 text-xs">
+            <div><span class="block text-emerald-400 font-bold text-sm">100%</span><span class="text-slate-400">Spend Visibility</span></div>
+            <div><span class="block text-cyan-400 font-bold text-sm">Zero</span><span class="text-slate-400">Missed Launches</span></div>
+            <div><span class="block text-white font-bold text-sm">SOPs</span><span class="text-slate-400">End-to-End</span></div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Creative Ops</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Spend Tracking</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">BI Reporting</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CASE STUDY 3: ENTERPRISE SCALE & BI INFRASTRUCTURE -->
+      <article class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between hover:border-indigo-500/60 transition" data-category="bi digital">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-2.5 py-1 rounded-md bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-semibold">Case Study 03 · Scale &amp; Analytics</span>
+            <span class="text-xs text-slate-400 font-mono">Regional LATAM</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">Enterprise Credentialing &amp; License ROI Governance</h3>
+          <p class="text-xs text-cyan-400 font-medium mt-1">Global Enterprise Partner · Multi-Region Program Rollout</p>
+
+          <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+            Architected and managed two enterprise-wide automation &amp; BI programs: (1) a trilingual (EN/ES/PT) zero-touch credential rollout for 30,007 staff, and (2) an outlier engine recovering underutilized SaaS/LinkedIn Learning licenses across 4,500 users.
+          </p>
+
+          <div class="mt-4 bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 text-xs space-y-2">
+            <div><strong class="text-white">Analytics Architecture:</strong> <span class="text-slate-300">Star Schema in Power BI &amp; DOMO reconciling 143,000+ records in under 3 seconds for executive Townhall reporting.</span></div>
+            <div><strong class="text-white">Stakeholder Comms:</strong> <span class="text-slate-300">Automated Teams Adaptive Cards &amp; unified executive scorecards replacing manual tracking across 300+ managers.</span></div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-4 text-xs">
+            <div><span class="block text-emerald-400 font-bold text-sm">2,735 hrs/yr</span><span class="text-slate-400">Combined Saved</span></div>
+            <div><span class="block text-cyan-400 font-bold text-sm">$51,965</span><span class="text-slate-400">Annual Savings</span></div>
+            <div><span class="block text-white font-bold text-sm">30,007</span><span class="text-slate-400">Users Reached</span></div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+            <span class="px-2 py-0.5 bg-slate-800 rounded">DOMO / Power BI</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">KPI Governance</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- CASE STUDY 4: EL PAISA CARGO US LOGISTICS -->
+      <article class="project-card glass-card rounded-2xl p-6 flex flex-col justify-between hover:border-amber-500/60 transition" data-category="bi agency">
+        <div>
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-2.5 py-1 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold">Case Study 04 · U.S. Client Ops</span>
+            <span class="text-xs text-slate-400 font-mono">U.S. Freight &amp; Logistics</span>
+          </div>
+          <h3 class="text-xl font-bold text-white">El Paisa Cargo: Operations Cockpit &amp; Financial Tracking</h3>
+          <p class="text-xs text-cyan-400 font-medium mt-1">U.S. Logistics Client · Operations Modernization &amp; Reporting</p>
+
+          <p class="text-sm text-slate-300 mt-4 leading-relaxed">
+            Acted as dedicated operations consultant to U.S. ownership—standardizing dispatch timelines, auditing work orders and client billing schedules, and deploying executive BI scorecards for real-time route profitability.
+          </p>
+
+          <div class="mt-4 bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 text-xs space-y-2">
+            <div><strong class="text-white">Scope &amp; Process Ownership:</strong> <span class="text-slate-300">Turned unstructured dispatch records into clean relational trackers connecting schedules, cost lines, and invoicing milestones.</span></div>
+            <div><strong class="text-white">Executive Visibility:</strong> <span class="text-slate-300">Eliminated recurring manual data reconciliations, giving US leadership single-click weekly status reviews.</span></div>
+          </div>
+        </div>
+
+        <div class="mt-5 pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex gap-4 text-xs">
+            <div><span class="block text-emerald-400 font-bold text-sm">-80%</span><span class="text-slate-400">Reporting Overhead</span></div>
+            <div><span class="block text-cyan-400 font-bold text-sm">100%</span><span class="text-slate-400">Invoice Audit</span></div>
+            <div><span class="block text-white font-bold text-sm">US Hours</span><span class="text-slate-400">Direct Sync</span></div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 text-[11px] text-slate-300">
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Excel / DOMO</span>
+            <span class="px-2 py-0.5 bg-slate-800 rounded">Vendor Coordination</span>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- PM Governance Framework Section -->
+  <section id="methodology" class="py-12 bg-slate-900/40 border-y border-slate-800/70">
+    <div class="max-w-6xl mx-auto px-5">
+      <div class="mb-8">
+        <span class="text-xs font-bold uppercase tracking-widest text-cyan-400">How I Run Projects</span>
+        <h2 class="text-2xl font-extrabold text-white mt-1">Agency-Ready Delivery &amp; Scope Governance</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="glass-card rounded-xl p-5">
+          <div class="text-xs font-bold text-emerald-400 mb-2">01 · PLANNING &amp; SCOPING</div>
+          <h4 class="font-bold text-white text-sm mb-2">Clear Milestones &amp; WBS</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Define scope boundaries, acceptance criteria, dependencies, and realistic launch schedules before dev/creative hours burn.</p>
+        </div>
+        <div class="glass-card rounded-xl p-5">
+          <div class="text-xs font-bold text-cyan-400 mb-2">02 · BUDGET &amp; HOURS</div>
+          <h4 class="font-bold text-white text-sm mb-2">Profitability Protection</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Track estimated vs. actual hours weekly, spot overruns early, and convert out-of-scope requests into transparent trade-offs.</p>
+        </div>
+        <div class="glass-card rounded-xl p-5">
+          <div class="text-xs font-bold text-indigo-400 mb-2">03 · TEAM COORDINATION</div>
+          <h4 class="font-bold text-white text-sm mb-2">Unblocking Workflows</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Keep designers, backend/frontend developers, and marketers aligned with crisp tickets, clear handoffs, and daily check-ins.</p>
+        </div>
+        <div class="glass-card rounded-xl p-5">
+          <div class="text-xs font-bold text-amber-400 mb-2">04 · QA &amp; CLIENT COMMS</div>
+          <h4 class="font-bold text-white text-sm mb-2">Proactive Transparency</h4>
+          <p class="text-xs text-slate-400 leading-relaxed">Audit every deliverable prior to client review, manage feedback rounds smoothly, and deliver data-backed executive updates.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tools & Credentials -->
+  <section id="stack" class="py-12 max-w-6xl mx-auto px-5">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-4">Core Tools &amp; Operational Stack</h3>
+        <div class="space-y-3 text-xs text-slate-300">
+          <div><strong class="text-emerald-400">PM &amp; Collaboration:</strong> Asana, Trello, Jira, Notion workflows, Slack, Microsoft Teams, Google Workspace.</div>
+          <div><strong class="text-emerald-400">BI, Budgets &amp; Analytics:</strong> Microsoft Excel (XLOOKUP, Power Query, Pivot Modeling), DOMO, Power BI (DAX), SQL, Looker Studio.</div>
+          <div><strong class="text-emerald-400">Workflow Automation:</strong> Power Automate, SharePoint Lists, AI Assistants / Meeting &amp; Status Digest Workflows.</div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6">
+        <h3 class="text-lg font-bold text-white mb-4">Education &amp; Official Certifications</h3>
+        <ul class="space-y-2.5 text-xs text-slate-300">
+          <li>• <strong class="text-white">Bachelor of Laws (LL.B.) — Magna Cum Laude</strong> (100% Academic Scholarship, Honors Thesis) — UCA</li>
+          <li>• <strong class="text-white">Postgraduate Studies in Personal Coaching &amp; Organizational Leadership</strong> — Univ. Europea del Atlántico</li>
+          <li>• <strong class="text-white">Google Certified Professional Data Analyst</strong></li>
+          <li>• <strong class="text-white">DOMO Certified Business Intelligence Professional</strong></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 py-8 text-center text-xs text-slate-500">
+    <div class="max-w-6xl mx-auto px-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>Javier Reyes Ruiz · Managua, Nicaragua (Remote US Business Hours Overlap)</div>
+      <div class="flex items-center gap-5">
+        <a href="mailto:javier.reyes.ruiz@gmail.com" class="text-slate-300 hover:text-emerald-400 transition">javier.reyes.ruiz@gmail.com</a>
+        <a href="https://www.linkedin.com/in/javierreyesruiz" target="_blank" class="text-slate-300 hover:text-emerald-400 transition">LinkedIn</a>
+        <a href="https://github.com/jarexlp" target="_blank" class="text-slate-300 hover:text-emerald-400 transition">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function filterProjects(cat) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        if (btn.dataset.filter === cat) {
+          btn.classList.remove('bg-slate-800', 'text-slate-300');
+          btn.classList.add('bg-emerald-500', 'text-slate-950');
+        } else {
+          btn.classList.remove('bg-emerald-500', 'text-slate-950');
+          btn.classList.add('bg-slate-800', 'text-slate-300');
+        }
+      });
+
+      document.querySelectorAll('.project-card').forEach(card => {
+        const cats = card.dataset.category.split(' ');
+        if (cat === 'all' || cats.includes(cat)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
