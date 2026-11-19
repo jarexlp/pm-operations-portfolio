@@ -1,0 +1,362 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "$connections": {
+      "defaultValue": {},
+      "type": "Object"
+    },
+    "SharePointSiteUrl": {
+      "defaultValue": "https://your-tenant.sharepoint.com/sites/operations-hub",
+      "type": "String"
+    },
+    "TeamsGroupId": {
+      "defaultValue": "<TEAMS_GROUP_GUID>",
+      "type": "String"
+    },
+    "TeamsChannelId": {
+      "defaultValue": "<TEAMS_CHANNEL_ID>",
+      "type": "String"
+    }
+  },
+  "triggers": {
+    "When_a_Teams_meeting_ends": {
+      "type": "OpenApiConnectionWebhook",
+      "inputs": {
+        "host": {
+          "connectionName": "shared_teams",
+          "operationId": "OnMeetingEndedWebhook",
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+        },
+        "parameters": {
+          "triggerState/meetingType": "All"
+        }
+      }
+    }
+  },
+  "actions": {
+    "Init_varMeetingDurationMin": {
+      "runAfter": {},
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [
+          {
+            "name": "varMeetingDurationMin",
+            "type": "integer",
+            "value": 240
+          }
+        ]
+      }
+    },
+    "Init_varMinRequiredMinutes": {
+      "runAfter": {
+        "Init_varMeetingDurationMin": [
+          "Succeeded"
+        ]
+      },
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [
+          {
+            "name": "varMinRequiredMinutes",
+            "type": "float",
+            "value": "@mul(variables('varMeetingDurationMin'), 0.75)"
+          }
+        ]
+      }
+    },
+    "Init_varSessionCode": {
+      "runAfter": {
+        "Init_varMinRequiredMinutes": [
+          "Succeeded"
+        ]
+      },
+      "type": "InitializeVariable",
+      "inputs": {
+        "variables": [
+          {
+            "name": "varSessionCode",
+            "type": "string",
+            "value": "@trim(first(split(coalesce(triggerOutputs()?['body/subject'], 'SESSION-001'), ' - ')))"
+          }
+        ]
+      }
+    },
+    "Get_attendance_report": {
+      "runAfter": {
+        "Init_varSessionCode": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "host": {
+          "connectionName": "shared_teams",
+          "operationId": "GetMeetingAttendanceReport",
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+        },
+        "parameters": {
+          "meetingId": "@triggerOutputs()?['body/meetingId']"
+        }
+      }
+    },
+    "Apply_to_each_Attendee": {
+      "foreach": "@outputs('Get_attendance_report')?['body/attendanceRecords']",
+      "runAfter": {
+        "Get_attendance_report": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "actions": {
+        "Compose_Email": {
+          "type": "Compose",
+          "inputs": "@toLower(trim(coalesce(items('Apply_to_each_Attendee')?['emailAddress'], items('Apply_to_each_Attendee')?['userPrincipalName'], '')))"
+        },
+        "Get_User_Profile_Office365": {
+          "runAfter": {
+            "Compose_Email": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_office365users",
+              "operationId": "UserProfile_V2",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+            },
+            "parameters": {
+              "id": "@outputs('Compose_Email')"
+            }
+          }
+        },
+        "Compose_User_Duration_Min": {
+          "runAfter": {
+            "Get_User_Profile_Office365": [
+              "Succeeded",
+              "Failed",
+              "Skipped"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@div(float(items('Apply_to_each_Attendee')?['totalAttendanceInSeconds']), 60.0)"
+        },
+        "Compose_Attendance_Percentage": {
+          "runAfter": {
+            "Compose_User_Duration_Min": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@mul(div(float(items('Apply_to_each_Attendee')?['totalAttendanceInSeconds']), float(mul(variables('varMeetingDurationMin'), 60.0))), 100.0)"
+        },
+        "Compose_Compliance_Status": {
+          "runAfter": {
+            "Compose_Attendance_Percentage": [
+              "Succeeded"
+            ]
+          },
+          "type": "Compose",
+          "inputs": "@if(greaterOrEquals(outputs('Compose_User_Duration_Min'), variables('varMinRequiredMinutes')), 'Attended (>= 75%)', 'Incomplete (< 75%)')"
+        },
+        "Check_Registrations": {
+          "runAfter": {
+            "Compose_Compliance_Status": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "GetItems",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('SharePointSiteUrl')",
+              "table": "Session_Registrations",
+              "$filter": "Session_ID eq '@{variables('varSessionCode')}' and EmployeeID eq '@{coalesce(outputs('Get_User_Profile_Office365')?['body/employeeId'], 'UNKNOWN')}'"
+            }
+          }
+        },
+        "Condition_Is_PreRegistered": {
+          "runAfter": {
+            "Check_Registrations": [
+              "Succeeded"
+            ]
+          },
+          "type": "If",
+          "expression": {
+            "greater": [
+              "@length(outputs('Check_Registrations')?['body/value'])",
+              0
+            ]
+          },
+          "actions": {
+            "Update_Registration_Status": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "shared_sharepointonline",
+                  "operationId": "PatchItem",
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+                },
+                "parameters": {
+                  "dataset": "@parameters('SharePointSiteUrl')",
+                  "table": "Session_Registrations",
+                  "id": "@first(outputs('Check_Registrations')?['body/value'])?['ID']",
+                  "item/Attendance_Status": "@if(equals(outputs('Compose_Compliance_Status'), 'Attended (>= 75%)'), 'Attended', 'Insufficient Duration')"
+                }
+              }
+            }
+          }
+        },
+        "Create_Attendance_Record": {
+          "runAfter": {
+            "Condition_Is_PreRegistered": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "PostItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('SharePointSiteUrl')",
+              "table": "Teams_Attendance_Audit",
+              "item/Title": "@variables('varSessionCode')",
+              "item/Course_Name": "@coalesce(triggerOutputs()?['body/subject'], 'Leadership Session')",
+              "item/EmployeeID": "@coalesce(outputs('Get_User_Profile_Office365')?['body/employeeId'], 'NOT_FOUND_IN_O365')",
+              "item/Attendee_Email": "@outputs('Compose_Email')",
+              "item/Attendee_Name": "@coalesce(items('Apply_to_each_Attendee')?['identity']?['displayName'], outputs('Get_User_Profile_Office365')?['body/displayName'], 'Participant')",
+              "item/Session_Date": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+              "item/Meeting_Duration_Min": "@variables('varMeetingDurationMin')",
+              "item/User_Duration_Min": "@outputs('Compose_User_Duration_Min')",
+              "item/Attendance_Percentage": "@outputs('Compose_Attendance_Percentage')",
+              "item/Compliance_Status": {
+                "Value": "@outputs('Compose_Compliance_Status')"
+              },
+              "item/Registration_Type": {
+                "Value": "@if(greater(length(outputs('Check_Registrations')?['body/value']), 0), 'Pre-Registered', 'Walk-in')"
+              },
+              "item/Raw_Intervals_JSON": "@string(items('Apply_to_each_Attendee')?['attendanceIntervals'])",
+              "item/LMS_Sync_Status": {
+                "Value": "Pending"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Get_Unattended_Registrations": {
+      "runAfter": {
+        "Apply_to_each_Attendee": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "host": {
+          "connectionName": "shared_sharepointonline",
+          "operationId": "GetItems",
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+        },
+        "parameters": {
+          "dataset": "@parameters('SharePointSiteUrl')",
+          "table": "Session_Registrations",
+          "$filter": "Session_ID eq '@{variables('varSessionCode')}' and Attendance_Status eq 'Enrolled'"
+        }
+      }
+    },
+    "Apply_to_each_NoShow": {
+      "foreach": "@outputs('Get_Unattended_Registrations')?['body/value']",
+      "runAfter": {
+        "Get_Unattended_Registrations": [
+          "Succeeded"
+        ]
+      },
+      "type": "Foreach",
+      "actions": {
+        "Mark_NoShow_in_Registrations": {
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "PatchItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('SharePointSiteUrl')",
+              "table": "Session_Registrations",
+              "id": "@items('Apply_to_each_NoShow')?['ID']",
+              "item/Attendance_Status": "No-Show"
+            }
+          }
+        },
+        "Record_NoShow_Audit": {
+          "runAfter": {
+            "Mark_NoShow_in_Registrations": [
+              "Succeeded"
+            ]
+          },
+          "type": "OpenApiConnection",
+          "inputs": {
+            "host": {
+              "connectionName": "shared_sharepointonline",
+              "operationId": "PostItem",
+              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+            },
+            "parameters": {
+              "dataset": "@parameters('SharePointSiteUrl')",
+              "table": "Teams_Attendance_Audit",
+              "item/Title": "@variables('varSessionCode')",
+              "item/Course_Name": "@coalesce(items('Apply_to_each_NoShow')?['Course_Name'], triggerOutputs()?['body/subject'])",
+              "item/EmployeeID": "@items('Apply_to_each_NoShow')?['EmployeeID']",
+              "item/Attendee_Email": "@items('Apply_to_each_NoShow')?['UserEmail']",
+              "item/Attendee_Name": "@items('Apply_to_each_NoShow')?['UserName']",
+              "item/Session_Date": "@formatDateTime(utcNow(), 'yyyy-MM-dd')",
+              "item/Meeting_Duration_Min": "@variables('varMeetingDurationMin')",
+              "item/User_Duration_Min": 0,
+              "item/Attendance_Percentage": 0,
+              "item/Compliance_Status": {
+                "Value": "No-Show"
+              },
+              "item/Registration_Type": {
+                "Value": "Pre-Registered"
+              },
+              "item/LMS_Sync_Status": {
+                "Value": "Skipped"
+              }
+            }
+          }
+        }
+      }
+    },
+    "Send_Summary_Teams_Notification": {
+      "runAfter": {
+        "Apply_to_each_NoShow": [
+          "Succeeded"
+        ]
+      },
+      "type": "OpenApiConnection",
+      "inputs": {
+        "host": {
+          "connectionName": "shared_teams",
+          "operationId": "PostMessageToConversation",
+          "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+        },
+        "parameters": {
+          "poster": "Flow bot",
+          "location": "Channel",
+          "body/recipient/groupId": "@parameters('TeamsGroupId')",
+          "body/recipient/channelId": "@parameters('TeamsChannelId')",
+          "body/messageBody": "<h3>Attendance Audit Summary - Session @{variables('varSessionCode')}</h3><p>Teams telemetry recorded automatically to SharePoint Lists.</p><ul><li><strong>Attendees:</strong> @{length(outputs('Get_attendance_report')?['body/attendanceRecords'])}</li><li><strong>No-Shows:</strong> @{length(outputs('Get_Unattended_Registrations')?['body/value'])}</li></ul>"
+        }
+      }
+    }
+  }
+}
